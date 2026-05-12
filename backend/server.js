@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 
+import connectionDB from './database/db.js';
+
 dotenv.config();
 const port = process.env.PORT;
 
@@ -11,6 +13,9 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.listen(port, () => {
-  console.log(`Server running at: http://localhost:${port}`)
-})
+connectionDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server running at: http://localhost:${port}`);
+    });
+  });
