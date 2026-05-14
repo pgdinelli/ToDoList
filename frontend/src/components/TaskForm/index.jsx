@@ -16,7 +16,9 @@ function TaskForm() {
                 <ul className="w-full flex flex-col gap-3">
                     <li className="w-full flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                            <FaRegSquare />
+                            <button className="cursor-pointer">
+                                <FaRegSquare />
+                            </button>
                             Tarefa de teste 1
                         </div>
                         <div className="flex items-center gap-3 text-2xl">
@@ -33,7 +35,9 @@ function TaskForm() {
 
                     <li className="w-full flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                            <FaRegCheckSquare />
+                            <button className="cursor-pointer">
+                                <FaRegCheckSquare />
+                            </button>
                             Tarefa de teste 2
                         </div>
                         <div className="flex items-center gap-3 text-2xl">
