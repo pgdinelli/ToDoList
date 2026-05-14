@@ -1,11 +1,13 @@
-import './App.css'
+import TaskForm from "./components/TaskForm"
+import Title from "./components/Title"
 
 function App() {
 
   return (
-    <>
-      <h1>Hello World!</h1>
-    </>
+    <main className="w-full min-h-screen px-10 flex flex-col items-center gap-4 justify-center bg-gray-300">
+      <Title />
+      <TaskForm />
+    </main>
   )
 }
 
