@@ -164,7 +164,7 @@ function TaskForm() {
                                             onChange={(e) => setEditTask(prev => ({ ...prev, title: e.target.value }))}
                                         />
                                     ) : (
-                                        <h2 className={task.status ? 'line-through' : ''}>{task.title}</h2>
+                                        <h2 className={task.status ? 'line-through italic' : ''}>{task.title}</h2>
                                     )}
                                 </div>
 
