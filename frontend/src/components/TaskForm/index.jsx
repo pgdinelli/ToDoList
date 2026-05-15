@@ -3,7 +3,7 @@ import { FaEdit, FaTrash, FaRegSquare, FaRegCheckSquare } from "react-icons/fa";
 
 function TaskForm() {
     const [tasksArr, setTasksArr] = useState([]);
-    const [task, setTask] = useState({title: '', description: ''});
+    const [task, setTask] = useState({ title: '', description: '' });
 
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -44,15 +44,34 @@ function TaskForm() {
             });
 
             const createdTask = await res.json();
-            console.log(createdTask);
 
-            setTask({title: '', description: ''});
+            setTask({ title: '', description: '' });
             setTasksArr(prev => [...prev, createdTask]);
 
         } catch (error) {
             console.error(error);
         }
-    }
+    };
+
+    const handleUpdate = async (id) => {
+
+        //TODO: implementar função de atualizar tarefas
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            if (window.confirm('Tem certeza que deseja deletar esta tarefa?')) {
+                const res = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE',
+                });
+
+                if(!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                setTasksArr(prev => prev.filter(task => task._id !== id));
+            }
+        } catch (error) {
+            console.error('Error deleting task: ', error);
+        }
+    };
 
 
     console.log(tasksArr)
@@ -70,40 +89,44 @@ function TaskForm() {
                         placeholder="Insira uma breve descrição"
                         className="py-1 px-2 border outline-0"
                         value={task.description}
-                        onChange={(e) => setTask(prev => ({...prev, description: e.target.value}))}
-                        >
-                            
-                        </textarea>
+                        onChange={(e) => setTask(prev => ({ ...prev, description: e.target.value }))}
+                    >
+
+                    </textarea>
                     <button className="bg-green-400 px-1 cursor-pointer rounded-sm">Adicionar</button>
                 </form>
             </div>
 
             <ul className="flex flex-col gap-2">
                 {tasksArr.map((task) => {
-                    return (
-                        <Fragment key={task._id}>
-                            <li className="w-full flex items-center justify-between gap-2 bg-gray-300 p-2 rounded-md">
-                                <div className="flex items-center gap-2">
-                                    <button className="cursor-pointer">
-                                        <FaRegSquare />
-                                    </button>
-                                    <h2>{task.title}</h2>
-                                </div>
+                        return (
+                            <Fragment key={task._id}>
+                                <li className="w-full flex items-center justify-between gap-2 bg-gray-300 p-2 rounded-md">
+                                    <div className="flex items-center gap-2">
+                                        <button className="cursor-pointer">
+                                            <FaRegSquare />
+                                        </button>
+                                        <h2>{task.title}</h2>
+                                    </div>
 
-                                <div className="flex items-center gap-3 text-2xl">
-                                    <button className="cursor-pointer">
-                                        <FaEdit className="text-amber-600" />
-                                    </button>
-                                    <button className="cursor-pointer">
-                                        <FaTrash className="text-red-600" />
-                                    </button>
-                                </div>
+                                    <div className="flex items-center gap-3 text-2xl">
+                                        <button className="cursor-pointer"
+                                            onClick={() => handleUpdate(task._id)}
+                                        >
+                                            <FaEdit className="text-amber-600" />
+                                        </button>
+                                        <button className="cursor-pointer"
+                                            onClick={() => handleDelete(task._id)}
+                                        >
+                                            <FaTrash className="text-red-600" />
+                                        </button>
+                                    </div>
 
-                            </li>
-                            <p className="p-1 text-gray-500 italic">{task.description}</p>
-                        </Fragment>
-                    )
-                })}
+                                </li>
+                                <p className="p-1 text-gray-500 italic">{task.description}</p>
+                            </Fragment>
+                        )
+                    })}
             </ul>
 
         </div>
