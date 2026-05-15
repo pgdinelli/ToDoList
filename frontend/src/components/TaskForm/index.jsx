@@ -5,6 +5,9 @@ function TaskForm() {
     const [tasksArr, setTasksArr] = useState([]);
     const [task, setTask] = useState({ title: '', description: '' });
 
+    const [editingTask, setEditingTask] = useState(null);
+    const [editTask, setEditTask] = useState({ title: '', description: '' });
+
     const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
@@ -53,9 +56,54 @@ function TaskForm() {
         }
     };
 
-    const handleUpdate = async (id) => {
+    const handleTaskChecked = async (task) => {
+        const payload = {
+            title: task.title,
+            description: task.description,
+            status: !task.status,
+        };
 
-        //TODO: implementar função de atualizar tarefas
+        try {
+            const res = await fetch(`${API_URL}/${task._id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+            const updatedTask = await res.json();
+            setTasksArr(prev => prev.map(t => t._id === task._id ? updatedTask : t));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleEdit = (task) => {
+        setEditingTask(task._id);
+        setEditTask({ title: task.title, description: task.description })
+    };
+
+    const handleUpdate = async (id) => {
+        if (!editTask.title) return;
+
+        try {
+            const res = await fetch(`${API_URL}/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: editTask.title, description: editTask.description })
+            });
+
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+            const updatedTask = await res.json();
+            setTasksArr(prev => prev.map(task => task._id === id ? updatedTask : task));
+
+            setEditingTask(null);
+            setEditTask({ title: '', description: '' });
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleDelete = async (id) => {
@@ -65,7 +113,7 @@ function TaskForm() {
                     method: 'DELETE',
                 });
 
-                if(!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
                 setTasksArr(prev => prev.filter(task => task._id !== id));
             }
         } catch (error) {
@@ -99,34 +147,65 @@ function TaskForm() {
 
             <ul className="flex flex-col gap-2">
                 {tasksArr.map((task) => {
-                        return (
-                            <Fragment key={task._id}>
-                                <li className="w-full flex items-center justify-between gap-2 bg-gray-300 p-2 rounded-md">
-                                    <div className="flex items-center gap-2">
-                                        <button className="cursor-pointer">
-                                            <FaRegSquare />
-                                        </button>
-                                        <h2>{task.title}</h2>
-                                    </div>
+                    return (
+                        <Fragment key={task._id}>
+                            <li className="w-full flex items-center justify-between gap-2 bg-gray-300 p-2 rounded-md">
+                                <div className="w-full flex items-center gap-2">
+                                    <button className="cursor-pointer"
+                                        onClick={() => handleTaskChecked(task)}
+                                    >
+                                        {task.status ? <FaRegCheckSquare/> : <FaRegSquare />}
+                                    </button>
+                                    {editingTask === task._id ? (
+                                        <input
+                                            type="text"
+                                            className="bg-white w-full py-1 px-2 rounded-md outline-0"
+                                            value={editTask.title}
+                                            onChange={(e) => setEditTask(prev => ({ ...prev, title: e.target.value }))}
+                                        />
+                                    ) : (
+                                        <h2 className={task.status ? 'line-through' : ''}>{task.title}</h2>
+                                    )}
+                                </div>
 
-                                    <div className="flex items-center gap-3 text-2xl">
-                                        <button className="cursor-pointer"
-                                            onClick={() => handleUpdate(task._id)}
-                                        >
-                                            <FaEdit className="text-amber-600" />
-                                        </button>
-                                        <button className="cursor-pointer"
-                                            onClick={() => handleDelete(task._id)}
-                                        >
-                                            <FaTrash className="text-red-600" />
-                                        </button>
-                                    </div>
-
-                                </li>
-                                <p className="p-1 text-gray-500 italic">{task.description}</p>
-                            </Fragment>
-                        )
-                    })}
+                                <div className="flex items-center gap-3 text-2xl">
+                                    {editingTask === task._id ? (
+                                        <>
+                                            <button className="cursor-pointer text-sm bg-green-400 px-2 py-1 rounded"
+                                                onClick={() => handleUpdate(task._id)}>
+                                                Salvar
+                                            </button>
+                                            <button className="cursor-pointer text-sm bg-gray-400 px-2 py-1 rounded"
+                                                onClick={() => setEditingTask(null)}>
+                                                Cancelar
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button className="cursor-pointer"
+                                                onClick={() => handleEdit(task)}>
+                                                <FaEdit className="text-amber-600" />
+                                            </button>
+                                            <button className="cursor-pointer"
+                                                onClick={() => handleDelete(task._id)}>
+                                                <FaTrash className="text-red-600" />
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </li>
+                            {editingTask === task._id ? (
+                                <textarea
+                                    className="py-1 px-2 border outline-0 w-full"
+                                    value={editTask.description}
+                                    onChange={(e) => setEditTask(prev => ({ ...prev, description: e.target.value }))}
+                                />
+                            ) : (
+                                <p className={`'p-1 text-gray-500 italic ' ${task.status ? 'line-through' : ''}`}>{task.description}</p>
+                            )}
+                        </Fragment>
+                    )
+                })}
             </ul>
 
         </div>
