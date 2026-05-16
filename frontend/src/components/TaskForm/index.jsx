@@ -121,9 +121,6 @@ function TaskForm() {
         }
     };
 
-
-    console.log(tasksArr)
-
     return (
         <div className="h-fit w-full lg:w-1/2 p-4 lg:p-5 bg-white rounded-xl">
             <div className="w-full mb-3.5">
@@ -149,59 +146,66 @@ function TaskForm() {
                 {tasksArr.map((task) => {
                     return (
                         <Fragment key={task._id}>
-                            <li className="w-full flex items-center justify-between gap-2 bg-gray-300 p-2 rounded-md">
-                                <div className="w-full flex items-center gap-2">
-                                    <button className="cursor-pointer p-0.5"
-                                        onClick={() => handleTaskChecked(task)}
-                                    >
-                                        {task.status ? <FaRegCheckSquare/> : <FaRegSquare />}
-                                    </button>
-                                    {editingTask === task._id ? (
+                            <li className="w-full flex flex-col gap-2 bg-gray-300 p-2 md:p-3 rounded-md">
+                                {editingTask === task._id ? (
+                                    <>
                                         <input
                                             type="text"
                                             className="bg-white w-full py-1 px-2 rounded-md outline-0"
                                             value={editTask.title}
                                             onChange={(e) => setEditTask(prev => ({ ...prev, title: e.target.value }))}
                                         />
-                                    ) : (
-                                        <h2 className={task.status ? 'line-through italic' : ''}>{task.title}</h2>
-                                    )}
-                                </div>
 
-                                <div className="flex items-center gap-3 text-2xl">
-                                    {editingTask === task._id ? (
-                                        <>
-                                            <button className="cursor-pointer text-sm bg-green-400 px-2 py-1 rounded"
+                                        <textarea
+                                            className="bg-white w-full py-1 px-2 border outline-0 rounded-md resize-none h-16"
+                                            value={editTask.description}
+                                            onChange={(e) => setEditTask(prev => ({ ...prev, description: e.target.value }))}
+                                        />
+
+                                        <div className="flex gap-2">
+                                            <button
+                                                className="cursor-pointer w-1/2 text-sm bg-green-400 py-1 rounded"
                                                 onClick={() => handleUpdate(task._id)}>
                                                 Salvar
                                             </button>
-                                            <button className="cursor-pointer text-sm bg-gray-400 px-2 py-1 rounded"
+                                            <button
+                                                className="cursor-pointer w-1/2 text-sm bg-gray-400 py-1 rounded"
                                                 onClick={() => setEditingTask(null)}>
                                                 Cancelar
                                             </button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <button className="cursor-pointer"
-                                                onClick={() => handleEdit(task)}>
+                                        </div>
+                                    </>
+                                ) : (
+
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className="flex items-center gap-2 min-w-0">
+                                            <button className="cursor-pointer p-2 shrink-0"
+                                                onClick={() => handleTaskChecked(task)}>
+                                                {task.status
+                                                    ? <FaRegCheckSquare className="text-green-600" />
+                                                    : <FaRegSquare />
+                                                }
+                                            </button>
+                                            <h2 className={`truncate ${task.status ? 'line-through text-gray-400' : ''}`}>
+                                                {task.title}
+                                            </h2>
+                                        </div>
+                                        <div className="flex items-center gap-1 md:gap-3 text-xl md:text-2xl shrink-0">
+                                            <button className="cursor-pointer p-2" onClick={() => handleEdit(task)}>
                                                 <FaEdit className="text-amber-600" />
                                             </button>
-                                            <button className="cursor-pointer"
-                                                onClick={() => handleDelete(task._id)}>
+                                            <button className="cursor-pointer p-2" onClick={() => handleDelete(task._id)}>
                                                 <FaTrash className="text-red-600" />
                                             </button>
-                                        </>
-                                    )}
-                                </div>
+                                        </div>
+                                    </div>
+                                )}
                             </li>
-                            {editingTask === task._id ? (
-                                <textarea
-                                    className="py-1 px-2 border outline-0 w-full"
-                                    value={editTask.description}
-                                    onChange={(e) => setEditTask(prev => ({ ...prev, description: e.target.value }))}
-                                />
-                            ) : (
-                                <p className={`'p-1 text-gray-500 italic ' ${task.status ? 'line-through' : ''}`}>{task.description}</p>
+
+                            {editingTask !== task._id && (
+                                <p className={`px-2 text-sm italic ${task.status ? 'line-through text-gray-400' : 'text-gray-500'}`}>
+                                    {task.description}
+                                </p>
                             )}
                         </Fragment>
                     )
