@@ -186,7 +186,7 @@ function TaskForm() {
                                                     : <FaRegSquare />
                                                 }
                                             </button>
-                                            <h2 className={`truncate ${task.status ? 'line-through text-gray-400' : ''}`}>
+                                            <h2 className={`${task.status ? 'line-through text-gray-400' : ''}`}>
                                                 {task.title}
                                             </h2>
                                         </div>
