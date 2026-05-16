@@ -125,9 +125,9 @@ function TaskForm() {
     console.log(tasksArr)
 
     return (
-        <div className="h-fit w-1/2 p-5 bg-white rounded-xl">
+        <div className="h-fit w-full lg:w-1/2 p-4 lg:p-5 bg-white rounded-xl">
             <div className="w-full mb-3.5">
-                <form onSubmit={handleSubmit} className="flex justify-between gap-4">
+                <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row justify-between gap-3">
                     <input type="text" placeholder="Adicione uma tarefa..."
                         className="bg-gray-300 w-full py-1 px-2 rounded-md outline-0"
                         value={task.title}
@@ -135,13 +135,13 @@ function TaskForm() {
                     />
                     <textarea name="description" id="description"
                         placeholder="Insira uma breve descrição"
-                        className="py-1 px-2 border outline-0"
+                        className="w-full py-1 px-2 border outline-0 rounded-md resize-none h-16 md:h-auto"
                         value={task.description}
                         onChange={(e) => setTask(prev => ({ ...prev, description: e.target.value }))}
                     >
 
                     </textarea>
-                    <button className="bg-green-400 px-1 cursor-pointer rounded-sm">Adicionar</button>
+                    <button className="bg-green-400 w-full md:w-auto px-4 py-2 cursor-pointer rounded-md font-medium">Adicionar</button>
                 </form>
             </div>
 
@@ -151,7 +151,7 @@ function TaskForm() {
                         <Fragment key={task._id}>
                             <li className="w-full flex items-center justify-between gap-2 bg-gray-300 p-2 rounded-md">
                                 <div className="w-full flex items-center gap-2">
-                                    <button className="cursor-pointer"
+                                    <button className="cursor-pointer p-0.5"
                                         onClick={() => handleTaskChecked(task)}
                                     >
                                         {task.status ? <FaRegCheckSquare/> : <FaRegSquare />}
