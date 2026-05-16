@@ -28,3 +28,31 @@ O método **handleSubmit** é responsável por enviar os dados digitados do usu�
 O método **handleTaskChecked** verifica se uma tarefa foi marcada como concluída ou não. Este irá fazer uma requisição do tipo PUT para que seja alterado apenas um atributo de uma única tarefa, sendo este atributo o booleano status. Desta forma basta utilizar o operador lógico de negação para trocar o valor entre true ou false e, dependendo do valor atual, irá renderizar uma estilização específica para a task.
 
 Os métodos **handleUpdate** e **handleDelete** irão respectivamente enviar as requisições de PUT e DELETE para o backend, indicando que houve uma alteração ou remoção de uma task. Estes métodos serão executados ao ativar o evento **onClick** dos botões de alterar e remover uma task da lista, que estão indicados por ícones ao lado de cada tarefa.
+
+## Tecnologias utilizadas
+- JavaScript
+- Nodejs
+- Express
+- Mongoose
+- MongoDB Atlas
+- React
+- TailwindCSS
+- Vite
+- React-icons
+
+## Deploy do projeto
+- https://to-do-list-henna-iota-91.vercel.app/
+
+## Rode o projeto localmente
+Faça o download do projeto através do repositório do GitHub, abra o projeto no **VSCode** e no terminal rode o comando `npm install` para instalar todas as dependências necessárias.
+
+### Rodar o frontend
+Verifique no terminal do editor de código se está dentro da pasta **frontend**, caso não esteja acesse a pasta utilizando `cd frontend` e então execute o comando `npm run dev` para iniciar o servidor Vite do front.
+
+### Rodar o backend
+Abra outro terminal no **VSCode** e verifique se está na pasta **backend**, caso ainda esteja dentro da pasta do frontend use o comando `cd ..` para voltar a pasta raiz do projeto e então faça `cd backend`. Ao entrar na pasta do backend, utilize o comando `npm run start` para rodar o servidor.
+
+## Autor do projeto
+**Paulo Guilherme Souza Dinelli**
+- **Linkedin:** https://www.linkedin.com/in/paulodinelli/
+- **GitHub:** https://github.com/pgdinelli
